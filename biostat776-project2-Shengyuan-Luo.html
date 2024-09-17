@@ -357,16 +357,17 @@ display: none;
 </div>
 
 
+<p>Project instruction: <a href="https://lcolladotor.github.io/jhustatcomputing/projects/project-2/" class="uri">https://lcolladotor.github.io/jhustatcomputing/projects/project-2/</a></p>
 <div id="part-1-fun-with-functions" class="section level1">
 <h1><strong>Part 1: Fun with functions</strong></h1>
 <div id="part-1a-exponential-transformation" class="section level3">
 <h3><strong>Part 1A: Exponential transformation</strong></h3>
 <p>The exponential of a number can be written as an infinite series
-expansion of the formexp⁡(x)=1+x+x22!+x33!+⋯Of course, we cannot compute
-an infinite series by the end of this term and so we must truncate it at
-a certain point in the series. The truncated sum of terms represents an
-approximation to the true exponential, but the approximation may be
-usable.</p>
+expansion of the formexp⁡(x)=1+x+x22!+x33!+⋯</p>
+<p>Of course, we cannot compute an infinite series by the end of this
+term and so we must truncate it at a certain point in the series. The
+truncated sum of terms represents an approximation to the true
+exponential, but the approximation may be usable.</p>
 <p>Write a function that computes the exponential of a number using the
 truncated series expansion. The function should take two arguments:</p>
 <ul>
@@ -378,7 +379,117 @@ expansion beyond the constant 1. The value of <code>k</code> is always
 <p>For example, if k=1, then the <code>Exp</code> function should return
 the number 1+x. If k=2, then you should return the number 1+x+x2/2!.</p>
 <p>Include at least one example of output using your function.</p>
+<pre class="r"><code>f &lt;- function(x,k) {
+if (k == 1) {
+    return(1+x)
+  } else if (k &lt;1) {
+    stop(&quot;Error: The number of terms to be used in the series expansion  cannot be &lt;1&quot;)
+  } else {
+  output =x + 1
+for (i in 2:k) {
+  output =output +(x**i)/factorial(i)
+}
+    return(output)
+  }
+}
+  
+f(4,2)</code></pre>
+<pre><code>## [1] 13</code></pre>
 </div>
+<div id="part-1b-sample-mean-and-sample-standard-deviation" class="section level3">
+<h3><strong>Part 1B: Sample mean and sample standard
+deviation</strong></h3>
+<p>Next, write two functions called <code>sample_mean()</code> and
+<code>sample_sd()</code> that takes as input a vector of data of length
+N and calculates the sample average and sample standard deviation for
+the set of N observations.</p>
+<p>x¯=1N∑i=1nxis=1N−1∑i=1N(xi−x―)2As a primer, the ∑i=13xi is equivalent
+to doing the sum of xi starting from i=1, increasing i by 1 each then,
+up to when i=3. That is, x1+x2+x3.</p>
+<p>Include at least one example of output using your functions.</p>
+<pre class="r"><code>sample_mean &lt;- function(x) {
+    # Add your solution here
+}
+
+sample_sd &lt;- function(x) {
+    # Add your solution here
+}</code></pre>
+</div>
+<div id="part-1c-confidence-intervals" class="section level3">
+<h3><strong>Part 1C: Confidence intervals</strong></h3>
+<p>Next, write a function called <code>calculate_CI()</code> that:</p>
+<ol style="list-style-type: decimal">
+<li><p>There should be two inputs to the <code>calculate_CI()</code>.
+First, it should take as input a vector of data of length N. Second, the
+function should also have a <code>conf</code> (=1−α) argument that
+allows the confidence interval to be adapted for different α.</p></li>
+<li><p>Calculates a confidence interval (CI) (e.g. a 95% CI) for the
+estimate of the mean in the population. If you are not familiar with
+confidence intervals, it is an interval that contains the population
+parameter with probability 1−α taking on this form</p></li>
+</ol>
+<p>x¯±tα/2,N−1sx¯=(x¯−tα/2,N−1sx¯,x¯+tα/2,N−1sx¯)</p>
+<p>where tα/2,N−1 is the value needed to generate an area of α/2 in each
+tail of the t-distribution with N−1 degrees of freedom and sx¯=sN is the
+standard error of the mean. For example, if we pick a 95% confidence
+interval and N=50, then you can calculate tα/2,N−1 as</p>
+<pre class="r"><code>alpha &lt;- 1 - 0.95
+degrees_freedom &lt;- 50 - 1
+t_score &lt;- qt(p = alpha / 2, df = degrees_freedom, lower.tail = FALSE)</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li><p>Returns a named vector of length 2, where the first value is the
+<code>lower_bound</code>, the second value is the
+<code>upper_bound</code>.</p>
+<pre class="r"><code>calculate_CI &lt;- function(x, conf = 0.95) {
+    # Add your solution here
+}</code></pre></li>
+</ol>
+<p>Include example of output from your function showing the output when
+using two different levels of <code>conf</code>.</p>
+</div>
+</div>
+<div id="r-session-information" class="section level1">
+<h1><strong>R session information</strong></h1>
+<pre class="r"><code>options(width = 120)
+sessioninfo::session_info()</code></pre>
+<pre><code>## ─ Session info ───────────────────────────────────────────────────────────────────────────────────────────────────────
+##  setting  value
+##  version  R version 4.4.1 (2024-06-14)
+##  os       macOS Ventura 13.0
+##  system   aarch64, darwin20
+##  ui       X11
+##  language (EN)
+##  collate  en_US.UTF-8
+##  ctype    en_US.UTF-8
+##  tz       America/New_York
+##  date     2024-09-17
+##  pandoc   3.1.11 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/aarch64/ (via rmarkdown)
+## 
+## ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
+##  package     * version date (UTC) lib source
+##  bslib         0.8.0   2024-07-29 [1] CRAN (R 4.4.0)
+##  cachem        1.1.0   2024-05-16 [1] CRAN (R 4.4.0)
+##  cli           3.6.3   2024-06-21 [1] CRAN (R 4.4.0)
+##  digest        0.6.37  2024-08-19 [1] CRAN (R 4.4.1)
+##  evaluate      0.24.0  2024-06-10 [1] CRAN (R 4.4.0)
+##  fastmap       1.2.0   2024-05-15 [1] CRAN (R 4.4.0)
+##  htmltools     0.5.8.1 2024-04-04 [1] CRAN (R 4.4.0)
+##  jquerylib     0.1.4   2021-04-26 [1] CRAN (R 4.4.0)
+##  jsonlite      1.8.8   2023-12-04 [1] CRAN (R 4.4.0)
+##  knitr         1.48    2024-07-07 [1] CRAN (R 4.4.0)
+##  lifecycle     1.0.4   2023-11-07 [1] CRAN (R 4.4.0)
+##  R6            2.5.1   2021-08-19 [1] CRAN (R 4.4.0)
+##  rlang         1.1.4   2024-06-04 [1] CRAN (R 4.4.0)
+##  rmarkdown     2.28    2024-08-17 [1] CRAN (R 4.4.0)
+##  rstudioapi    0.16.0  2024-03-24 [1] CRAN (R 4.4.0)
+##  sass          0.4.9   2024-03-15 [1] CRAN (R 4.4.0)
+##  sessioninfo   1.2.2   2021-12-06 [1] CRAN (R 4.4.0)
+##  xfun          0.47    2024-08-17 [1] CRAN (R 4.4.0)
+##  yaml          2.3.10  2024-07-26 [1] CRAN (R 4.4.0)
+## 
+##  [1] /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library
+## 
+## ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</code></pre>
 </div>
 
 

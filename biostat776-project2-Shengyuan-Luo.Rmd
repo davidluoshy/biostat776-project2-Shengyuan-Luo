@@ -9,11 +9,15 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+Project instruction: <https://lcolladotor.github.io/jhustatcomputing/projects/project-2/>
+
 # **Part 1: Fun with functions**
 
 ### **Part 1A: Exponential transformation**
 
-The exponential of a number can be written as an infinite series expansion of the formexp⁡(x)=1+x+x22!+x33!+⋯Of course, we cannot compute an infinite series by the end of this term and so we must truncate it at a certain point in the series. The truncated sum of terms represents an approximation to the true exponential, but the approximation may be usable.
+The exponential of a number can be written as an infinite series expansion of the formexp⁡(x)=1+x+x22!+x33!+⋯
+
+Of course, we cannot compute an infinite series by the end of this term and so we must truncate it at a certain point in the series. The truncated sum of terms represents an approximation to the true exponential, but the approximation may be usable.
 
 Write a function that computes the exponential of a number using the truncated series expansion. The function should take two arguments:
 
@@ -24,3 +28,74 @@ Write a function that computes the exponential of a number using the truncated s
 For example, if k=1, then the `Exp` function should return the number 1+x. If k=2, then you should return the number 1+x+x2/2!.
 
 Include at least one example of output using your function.
+
+```{r}
+f <- function(x,k) {
+if (k == 1) {
+    return(1+x)
+  } else if (k <1) {
+    stop("Error: The number of terms to be used in the series expansion  cannot be <1")
+  } else {
+  output =x + 1
+for (i in 2:k) {
+  output =output +(x**i)/factorial(i)
+}
+    return(output)
+  }
+}
+  
+f(4,2)
+```
+
+### **Part 1B: Sample mean and sample standard deviation**
+
+Next, write two functions called `sample_mean()` and `sample_sd()` that takes as input a vector of data of length N and calculates the sample average and sample standard deviation for the set of N observations.
+
+x¯=1N∑i=1nxis=1N−1∑i=1N(xi−x―)2As a primer, the ∑i=13xi is equivalent to doing the sum of xi starting from i=1, increasing i by 1 each then, up to when i=3. That is, x1+x2+x3.
+
+Include at least one example of output using your functions.
+
+```{r}
+sample_mean <- function(x) {
+    # Add your solution here
+}
+
+sample_sd <- function(x) {
+    # Add your solution here
+}
+```
+
+### **Part 1C: Confidence intervals**
+
+Next, write a function called `calculate_CI()` that:
+
+1.  There should be two inputs to the `calculate_CI()`. First, it should take as input a vector of data of length N. Second, the function should also have a `conf` (=1−α) argument that allows the confidence interval to be adapted for different α.
+
+2.  Calculates a confidence interval (CI) (e.g. a 95% CI) for the estimate of the mean in the population. If you are not familiar with confidence intervals, it is an interval that contains the population parameter with probability 1−α taking on this form
+
+x¯±tα/2,N−1sx¯=(x¯−tα/2,N−1sx¯,x¯+tα/2,N−1sx¯)
+
+where tα/2,N−1 is the value needed to generate an area of α/2 in each tail of the t-distribution with N−1 degrees of freedom and sx¯=sN is the standard error of the mean. For example, if we pick a 95% confidence interval and N=50, then you can calculate tα/2,N−1 as
+
+```{r}
+alpha <- 1 - 0.95
+degrees_freedom <- 50 - 1
+t_score <- qt(p = alpha / 2, df = degrees_freedom, lower.tail = FALSE)
+```
+
+3.  Returns a named vector of length 2, where the first value is the `lower_bound`, the second value is the `upper_bound`.
+
+    ```{r}
+    calculate_CI <- function(x, conf = 0.95) {
+        # Add your solution here
+    }
+    ```
+
+Include example of output from your function showing the output when using two different levels of `conf`.
+
+# **R session information**
+
+```{r}
+options(width = 120)
+sessioninfo::session_info()
+```
