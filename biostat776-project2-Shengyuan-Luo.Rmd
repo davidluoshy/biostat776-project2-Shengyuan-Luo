@@ -1,0 +1,26 @@
+---
+title: "biostat776-project2-Shengyuan-Luo"
+author: "davidluoshy"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# **Part 1: Fun with functions**
+
+### **Part 1A: Exponential transformation**
+
+The exponential of a number can be written as an infinite series expansion of the formexp⁡(x)=1+x+x22!+x33!+⋯Of course, we cannot compute an infinite series by the end of this term and so we must truncate it at a certain point in the series. The truncated sum of terms represents an approximation to the true exponential, but the approximation may be usable.
+
+Write a function that computes the exponential of a number using the truncated series expansion. The function should take two arguments:
+
+-   `x`: the number to be exponentiated
+
+-   `k`: the number of terms to be used in the series expansion beyond the constant 1. The value of `k` is always ≥1.
+
+For example, if k=1, then the `Exp` function should return the number 1+x. If k=2, then you should return the number 1+x+x2/2!.
+
+Include at least one example of output using your function.
