@@ -477,6 +477,120 @@ calculate_CI(c(1,8,5,3), 0.8)</code></pre>
 using two different levels of <code>conf</code>.</p>
 </div>
 </div>
+<div id="part-2-wrangling-data" class="section level1">
+<h1><strong>Part 2: Wrangling data</strong></h1>
+<p>In this part, we will practice our wrangling skills with the
+tidyverse that we learned about in module 1.</p>
+<div id="data" class="section level3">
+<h3><strong>Data</strong></h3>
+<p>The two datasets for this part of the assignment comes from <a href="https://www.tidytuesday.com/">TidyTuesday</a>. Specifically, we
+will use the following data from January 2020. To avoid re-downloading
+data, we will check to see if those files already exist using an
+<code>if()</code> statement:</p>
+<pre class="r"><code>library(here)</code></pre>
+<pre><code>## here() starts at /Users/s/Desktop/biostat776-project2-Shengyuan-Luo</code></pre>
+<pre class="r"><code>file_url_temperature &lt;- &quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-07/temperature.csv&quot;
+local_file_path_temperature &lt;- &quot;/Users/s/Desktop/biostat776-project2-Shengyuan-Luo/data/temperature.csv&quot;
+download.file(file_url_temperature, destfile = local_file_path_temperature)
+
+file_url_rainfall &lt;- &quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-07/rainfall.csv&quot;
+local_file_path_rainfall &lt;- &quot;/Users/s/Desktop/biostat776-project2-Shengyuan-Luo/data/rainfall.csv&quot;
+download.file(file_url_rainfall, destfile = local_file_path_rainfall)
+
+library(readr)
+rainfall &lt;- read_csv(here(&quot;data&quot;, &quot;rainfall.csv&quot;))</code></pre>
+<pre><code>## Rows: 179273 Columns: 11</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (6): station_code, city_name, month, day, quality, station_name
+## dbl (5): year, rainfall, period, lat, long
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>temperature &lt;- read_csv(here(&quot;data&quot;, &quot;temperature.csv&quot;))</code></pre>
+<pre><code>## Rows: 528278 Columns: 5
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (3): city_name, temp_type, site_name
+## dbl  (1): temperature
+## date (1): date
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>Now we can look at the data with <code>glimpse()</code></p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ purrr     1.0.2
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>glimpse(rainfall)</code></pre>
+<pre><code>## Rows: 179,273
+## Columns: 11
+## $ station_code &lt;chr&gt; &quot;009151&quot;, &quot;009151&quot;, &quot;009151&quot;, &quot;009151&quot;, &quot;009151&quot;, &quot;009151…
+## $ city_name    &lt;chr&gt; &quot;Perth&quot;, &quot;Perth&quot;, &quot;Perth&quot;, &quot;Perth&quot;, &quot;Perth&quot;, &quot;Perth&quot;, &quot;Pe…
+## $ year         &lt;dbl&gt; 1967, 1967, 1967, 1967, 1967, 1967, 1967, 1967, 1967, 196…
+## $ month        &lt;chr&gt; &quot;01&quot;, &quot;01&quot;, &quot;01&quot;, &quot;01&quot;, &quot;01&quot;, &quot;01&quot;, &quot;01&quot;, &quot;01&quot;, &quot;01&quot;, &quot;01…
+## $ day          &lt;chr&gt; &quot;01&quot;, &quot;02&quot;, &quot;03&quot;, &quot;04&quot;, &quot;05&quot;, &quot;06&quot;, &quot;07&quot;, &quot;08&quot;, &quot;09&quot;, &quot;10…
+## $ rainfall     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ period       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ quality      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ lat          &lt;dbl&gt; -31.96, -31.96, -31.96, -31.96, -31.96, -31.96, -31.96, -…
+## $ long         &lt;dbl&gt; 115.79, 115.79, 115.79, 115.79, 115.79, 115.79, 115.79, 1…
+## $ station_name &lt;chr&gt; &quot;Subiaco Wastewater Treatment Plant&quot;, &quot;Subiaco Wastewater…</code></pre>
+<p>If we look at the <a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2020#2020-data">TidyTuesday
+github repo</a> from 2020, we see this dataset contains temperature and
+rainfall data from Australia.</p>
+<p>Here is a data dictionary for what all the column names mean:</p>
+<ul>
+<li><a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-01-07/readme.md#data-dictionary" class="uri">https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-01-07/readme.md#data-dictionary</a></li>
+</ul>
+</div>
+<div id="tasks" class="section level3">
+<h3><strong>Tasks</strong></h3>
+<p>Using the <code>rainfall</code> and <code>temperature</code> data,
+perform the following steps and create a new data frame called
+<code>df</code>:</p>
+<ol style="list-style-type: decimal">
+<li><p>Start with <code>rainfall</code> dataset and drop any rows with
+NAs.</p>
+<pre class="r"><code>rainfall_complete &lt;- na.omit(rainfall)
+glimpse(rainfall_complete)</code></pre>
+<pre><code>## Rows: 64,476
+## Columns: 11
+## $ station_code &lt;chr&gt; &quot;009151&quot;, &quot;009151&quot;, &quot;009151&quot;, &quot;009151&quot;, &quot;009151&quot;, &quot;009151…
+## $ city_name    &lt;chr&gt; &quot;Perth&quot;, &quot;Perth&quot;, &quot;Perth&quot;, &quot;Perth&quot;, &quot;Perth&quot;, &quot;Perth&quot;, &quot;Pe…
+## $ year         &lt;dbl&gt; 1967, 1967, 1967, 1967, 1967, 1967, 1967, 1967, 1967, 196…
+## $ month        &lt;chr&gt; &quot;07&quot;, &quot;07&quot;, &quot;07&quot;, &quot;07&quot;, &quot;07&quot;, &quot;07&quot;, &quot;07&quot;, &quot;07&quot;, &quot;07&quot;, &quot;07…
+## $ day          &lt;chr&gt; &quot;05&quot;, &quot;06&quot;, &quot;07&quot;, &quot;10&quot;, &quot;11&quot;, &quot;14&quot;, &quot;15&quot;, &quot;16&quot;, &quot;17&quot;, &quot;18…
+## $ rainfall     &lt;dbl&gt; 2.8, 4.8, 5.8, 16.0, 1.0, 1.0, 15.5, 8.6, 12.2, 6.1, 11.7…
+## $ period       &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+## $ quality      &lt;chr&gt; &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y&quot;, &quot;Y…
+## $ lat          &lt;dbl&gt; -31.96, -31.96, -31.96, -31.96, -31.96, -31.96, -31.96, -…
+## $ long         &lt;dbl&gt; 115.79, 115.79, 115.79, 115.79, 115.79, 115.79, 115.79, 1…
+## $ station_name &lt;chr&gt; &quot;Subiaco Wastewater Treatment Plant&quot;, &quot;Subiaco Wastewater…</code></pre></li>
+<li><p>Create a new column titled <code>date</code> that combines the
+columns <code>year</code>, <code>month</code>, <code>day</code> into one
+column separated by “-”. (e.g. “2020-01-01”). This column should not be
+a character, but should be recognized as a date. (<strong>Hint</strong>:
+check out the <code>ymd()</code> function in <code>lubridate</code> R
+package). You will also want to add a column that just keeps the
+<code>year</code>.</p></li>
+<li><p>Using the <code>city_name</code> column, convert the city names
+(character strings) to all upper case.</p></li>
+<li><p>Join this wrangled rainfall dataset with the
+<code>temperature</code> dataset such that it includes only observations
+that are in both data frames. (<strong>Hint</strong>: there are two keys
+that you will need to join the two datasets together).
+(<strong>Hint</strong>: If all has gone well thus far, you should have a
+dataset with 83,964 rows and 13 columns).</p></li>
+</ol>
+</div>
+</div>
 <div id="r-session-information" class="section level1">
 <h1><strong>R session information</strong></h1>
 <pre class="r"><code>options(width = 120)
@@ -496,23 +610,57 @@ sessioninfo::session_info()</code></pre>
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 ##  package     * version date (UTC) lib source
+##  bit           4.0.5   2022-11-15 [1] CRAN (R 4.4.0)
+##  bit64         4.0.5   2020-08-30 [1] CRAN (R 4.4.0)
 ##  bslib         0.8.0   2024-07-29 [1] CRAN (R 4.4.0)
 ##  cachem        1.1.0   2024-05-16 [1] CRAN (R 4.4.0)
 ##  cli           3.6.3   2024-06-21 [1] CRAN (R 4.4.0)
+##  colorspace    2.1-1   2024-07-26 [1] CRAN (R 4.4.0)
+##  crayon        1.5.3   2024-06-20 [1] CRAN (R 4.4.0)
 ##  digest        0.6.37  2024-08-19 [1] CRAN (R 4.4.1)
+##  dplyr       * 1.1.4   2023-11-17 [1] CRAN (R 4.4.0)
 ##  evaluate      0.24.0  2024-06-10 [1] CRAN (R 4.4.0)
+##  fansi         1.0.6   2023-12-08 [1] CRAN (R 4.4.0)
 ##  fastmap       1.2.0   2024-05-15 [1] CRAN (R 4.4.0)
+##  forcats     * 1.0.0   2023-01-29 [1] CRAN (R 4.4.0)
+##  generics      0.1.3   2022-07-05 [1] CRAN (R 4.4.0)
+##  ggplot2     * 3.5.1   2024-04-23 [1] CRAN (R 4.4.0)
+##  glue          1.7.0   2024-01-09 [1] CRAN (R 4.4.0)
+##  gtable        0.3.5   2024-04-22 [1] CRAN (R 4.4.0)
+##  here        * 1.0.1   2020-12-13 [1] CRAN (R 4.4.0)
+##  hms           1.1.3   2023-03-21 [1] CRAN (R 4.4.0)
 ##  htmltools     0.5.8.1 2024-04-04 [1] CRAN (R 4.4.0)
 ##  jquerylib     0.1.4   2021-04-26 [1] CRAN (R 4.4.0)
 ##  jsonlite      1.8.8   2023-12-04 [1] CRAN (R 4.4.0)
 ##  knitr         1.48    2024-07-07 [1] CRAN (R 4.4.0)
 ##  lifecycle     1.0.4   2023-11-07 [1] CRAN (R 4.4.0)
+##  lubridate   * 1.9.3   2023-09-27 [1] CRAN (R 4.4.0)
+##  magrittr      2.0.3   2022-03-30 [1] CRAN (R 4.4.0)
+##  munsell       0.5.1   2024-04-01 [1] CRAN (R 4.4.0)
+##  pillar        1.9.0   2023-03-22 [1] CRAN (R 4.4.0)
+##  pkgconfig     2.0.3   2019-09-22 [1] CRAN (R 4.4.0)
+##  purrr       * 1.0.2   2023-08-10 [1] CRAN (R 4.4.0)
 ##  R6            2.5.1   2021-08-19 [1] CRAN (R 4.4.0)
+##  readr       * 2.1.5   2024-01-10 [1] CRAN (R 4.4.0)
 ##  rlang         1.1.4   2024-06-04 [1] CRAN (R 4.4.0)
 ##  rmarkdown     2.28    2024-08-17 [1] CRAN (R 4.4.0)
+##  rprojroot     2.0.4   2023-11-05 [1] CRAN (R 4.4.0)
 ##  rstudioapi    0.16.0  2024-03-24 [1] CRAN (R 4.4.0)
 ##  sass          0.4.9   2024-03-15 [1] CRAN (R 4.4.0)
+##  scales        1.3.0   2023-11-28 [1] CRAN (R 4.4.0)
 ##  sessioninfo   1.2.2   2021-12-06 [1] CRAN (R 4.4.0)
+##  stringi       1.8.4   2024-05-06 [1] CRAN (R 4.4.0)
+##  stringr     * 1.5.1   2023-11-14 [1] CRAN (R 4.4.0)
+##  tibble      * 3.2.1   2023-03-20 [1] CRAN (R 4.4.0)
+##  tidyr       * 1.3.1   2024-01-24 [1] CRAN (R 4.4.0)
+##  tidyselect    1.2.1   2024-03-11 [1] CRAN (R 4.4.0)
+##  tidyverse   * 2.0.0   2023-02-22 [1] CRAN (R 4.4.0)
+##  timechange    0.3.0   2024-01-18 [1] CRAN (R 4.4.0)
+##  tzdb          0.4.0   2023-05-12 [1] CRAN (R 4.4.0)
+##  utf8          1.2.4   2023-10-22 [1] CRAN (R 4.4.0)
+##  vctrs         0.6.5   2023-12-01 [1] CRAN (R 4.4.0)
+##  vroom         1.6.5   2023-12-05 [1] CRAN (R 4.4.0)
+##  withr         3.0.1   2024-07-31 [1] CRAN (R 4.4.0)
 ##  xfun          0.47    2024-08-17 [1] CRAN (R 4.4.0)
 ##  yaml          2.3.10  2024-07-26 [1] CRAN (R 4.4.0)
 ## 
