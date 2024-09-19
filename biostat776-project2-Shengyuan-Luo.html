@@ -11,7 +11,7 @@
 
 <meta name="author" content="davidluoshy" />
 
-<meta name="date" content="2024-09-17" />
+<meta name="date" content="2024-09-19" />
 
 <title>biostat776-project2-Shengyuan-Luo</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">biostat776-project2-Shengyuan-Luo</h1>
 <h4 class="author">davidluoshy</h4>
-<h4 class="date">2024-09-17</h4>
+<h4 class="date">2024-09-19</h4>
 
 </div>
 
@@ -407,13 +407,28 @@ the set of N observations.</p>
 to doing the sum of xi starting from i=1, increasing i by 1 each then,
 up to when i=3. That is, x1+x2+x3.</p>
 <p>Include at least one example of output using your functions.</p>
+<ul>
+<li><p>You can assume that the input value <code>x</code> will always be
+a <em>vector</em> of numbers of length <em>N</em>.</p></li>
+<li><p>Do not use the <code>mean()</code> and <code>sd()</code>
+functions in R.</p></li>
+</ul>
 <pre class="r"><code>sample_mean &lt;- function(x) {
-    # Add your solution here
+    print(sum(x)/length(x))
 }
 
 sample_sd &lt;- function(x) {
-    # Add your solution here
-}</code></pre>
+  total &lt;- 0
+  for (i in seq_along(x)) {
+   total = total + (x[i]-mean(x))^2
+  }
+  print(sqrt(total/(length(x)-1)))
+}
+
+sample_mean(c(1,8,5,3))</code></pre>
+<pre><code>## [1] 4.25</code></pre>
+<pre class="r"><code>sample_sd(c(1,8,5,3))</code></pre>
+<pre><code>## [1] 2.986079</code></pre>
 </div>
 <div id="part-1c-confidence-intervals" class="section level3">
 <h3><strong>Part 1C: Confidence intervals</strong></h3>
@@ -462,7 +477,7 @@ sessioninfo::session_info()</code></pre>
 ##  collate  en_US.UTF-8
 ##  ctype    en_US.UTF-8
 ##  tz       America/New_York
-##  date     2024-09-17
+##  date     2024-09-19
 ##  pandoc   3.1.11 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/aarch64/ (via rmarkdown)
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────

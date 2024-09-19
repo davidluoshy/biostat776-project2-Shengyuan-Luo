@@ -55,14 +55,25 @@ x¯=1N∑i=1nxis=1N−1∑i=1N(xi−x―)2As a primer, the ∑i=13xi is equivale
 
 Include at least one example of output using your functions.
 
+-   You can assume that the input value `x` will always be a *vector* of numbers of length *N*.
+
+-   Do not use the `mean()` and `sd()` functions in R.
+
 ```{r}
 sample_mean <- function(x) {
-    # Add your solution here
+    print(sum(x)/length(x))
 }
 
 sample_sd <- function(x) {
-    # Add your solution here
+  total <- 0
+  for (i in seq_along(x)) {
+   total = total + (x[i]-mean(x))^2
+  }
+  print(sqrt(total/(length(x)-1)))
 }
+
+sample_mean(c(1,8,5,3))
+sample_sd(c(1,8,5,3))
 ```
 
 ### **Part 1C: Confidence intervals**
