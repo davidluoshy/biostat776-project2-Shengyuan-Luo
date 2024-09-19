@@ -456,8 +456,22 @@ t_score &lt;- qt(p = alpha / 2, df = degrees_freedom, lower.tail = FALSE)</code>
 <code>lower_bound</code>, the second value is the
 <code>upper_bound</code>.</p>
 <pre class="r"><code>calculate_CI &lt;- function(x, conf = 0.95) {
-    # Add your solution here
-}</code></pre></li>
+  alpha &lt;- 1 - conf
+  degrees_freedom &lt;- length(x) - 1
+  t_score &lt;- qt(p = alpha / 2, df = degrees_freedom, lower.tail = FALSE)
+
+  lower_bound &lt;- mean(x) - t_score * sd(x)/sqrt(length(x)) 
+  upper_bound &lt;- mean(x) + t_score * sd(x)/sqrt(length(x)) 
+
+  print(lower_bound)
+  print(upper_bound)
+}
+calculate_CI(c(1,8,5,3), 0.8)</code></pre>
+<pre><code>## [1] 1.804783
+## [1] 6.695217</code></pre>
+<pre class="r"><code>calculate_CI(c(1,8,5,3), 0.95)</code></pre>
+<pre><code>## [1] -0.5015177
+## [1] 9.001518</code></pre></li>
 </ol>
 <p>Include example of output from your function showing the output when
 using two different levels of <code>conf</code>.</p>
